@@ -1,0 +1,25 @@
+#define TURBIDEZ  A1
+
+float voltage,turbidity;
+
+void setup() // Se ejecuta 1 vez al encender o reiniciar la placa
+{  
+  Serial.begin(9600);
+  pinMode(TURBIDEZ,INPUT);
+  pinMode(12, OUTPUT);
+  
+}
+void loop() // ciclo que se ejecuta infinitas veces hasta que apagues la placa
+{
+{
+  voltage=0.004888*analogRead(TURBIDEZ);  //in V
+  turbidity=-1120.4*voltage*voltage+5742.3*voltage-4352.9;  //in NTU
+  if((voltage>=2.5)&(turbidity>=0));
+  
+  //monitor serial
+   Serial.print("Tur:");
+  Serial.println(""+String(turbidity)+" NTU"); 
+ 
+  
+  }
+} 
