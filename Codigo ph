@@ -1,0 +1,50 @@
+#define SensorPin A0      // a saída analógica do medidor de pH é conectada à saída analógica do Arduinoin
+int phValue;
+
+//sensor ph
+unsigned long int avgValue;  //Armazene o valor médio do feedback do sensor
+float b;
+int buf[10],temp;//temperatura
+
+void setup() // Se ejecuta 1 vez al encender o reiniciar la placa
+{  
+  Serial.begin(9600);
+  }
+  
+  void loop() // ciclo que se ejecuta infinitas veces hasta que apagues la placa
+{
+}
+  //SENSOR PH
+  {
+  for(int i=0;i<10;i++)       //Obtenga 10 valores de muestra del sensor para suavizar el valor
+  { 
+    buf[i]=analogRead(SensorPin);
+    delay(10);
+  }
+  for(int i=0;i<9;i++)        //ordenar el análogo de pequeño a grande
+  {
+    for(int j=i+1;j<10;j++)
+    {
+      if(buf[i]>buf[j])
+      {
+        temp=buf[i];
+        buf[i]=buf[j];
+        buf[j]=temp;
+      }
+    }
+  }
+ 
+  avgValue=0;
+  for(int i=2;i<8;i++)                      //tomar el valor promedio de la muestra de 6 centros
+    avgValue+=buf[i];
+  float phValue=(float)avgValue*5.0/1024/6; //convertir el análogo en milivoltios
+  phValue=3.5*phValue; //convertir el milivoltio en valor de pH
+    
+  //monitor serial
+
+   Serial.print("PH:");
+   Serial.print(phValue,2);
+   Serial.println(" ");
+
+}   
+    
